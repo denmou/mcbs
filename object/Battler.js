@@ -23,18 +23,29 @@ class Battler {
         this.contractList = contractList;
         this.cardList = cardList;
         this.order = order;
-        this.init();
+        this.reset();
     }
 
-    init () {
+    reset () {
         this._point = Point.getPoint(this.level);
-        this._equipList = this.equipList;
-        for (const equip of this._equipList) {
+        this._equipList = [];
+        for (const equip of this.equipList) {
             this._point += equip.getPoint();
+            this._equipList.push(equip);
         }
-        this._runeList = this.runeList;
-        this._contractList = this.contractList;
-        this._cardList = this.cardList;
+        this._runeList = [];
+        for (const rune of this.runeList) {
+            this._runeList.push(rune);
+        }
+        this._contractList = [];
+        for (const contract of this.contractList) {
+            this._contractList.push(contract);
+        }
+        this._cardList = [];
+        for (const card of this.cardList) {
+            card.reset();
+            this._cardList.push(card);
+        }
         if (this.order) {
             this._cardList.sort(() => Math.random() > .5 ? -1 : 1)
         }
@@ -62,11 +73,11 @@ class Battler {
 
     draw() {
         if (this._wait.length < this._maxWait && this._cardList.length > 0) {
-            let card = this._cardList.shift();
+            const card = this._cardList.shift();
             this._wait.push(card);
-            return true;
+            return card;
         }
-        return false;
+        return null;
     }
 
     /**
