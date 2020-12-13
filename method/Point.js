@@ -65,7 +65,7 @@ const point = {
  * @param {number} level 
  * @returns {number} point
  */
-function getPoint(level) {
+function getValue(level) {
     let n = Math.floor((level - 1) / 10)
     let m = (level - 1) % 10
     //_point = 1000 + 600 * n + (1 + n) * n * 100 + (70 + 10 * n) * m
@@ -76,6 +76,21 @@ function getPoint(level) {
     }
 }
 
+/**
+ * 
+ * @param {number} time 
+ */
+function getRoundPoint(time) {
+    if (time <= 50) {
+        return 0
+    } else if (time <= 100) {
+        return 50 + (time - 50 - 1) * 30
+    } else {
+        return 1520 + (time - 100) * 100
+    }
+}
+
 module.exports = {
-    getPoint: getPoint
+    getValue: getValue,
+    getRoundPoint: getRoundPoint
 }

@@ -1,4 +1,4 @@
-const Card = require("./Card")
+const Card = require("./element/Card")
 
 class Contract extends Card {
     constructor(id, name, hp, atk, cd, race, skillList) {

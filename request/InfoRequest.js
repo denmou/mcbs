@@ -1,36 +1,36 @@
 const https = require("https")
 
-function requestData(type, id, callback) {
-    let postData = JSON.stringify({
-        id: 1,
-        type: "card"
-    })
-    let options = {
-        hostname: "www.biocurd.com",
-        path: "/data/info",
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Content-Length": Buffer.byteLength(postData)
+/**
+ * 
+ * @param {string} server 
+ * @param {string} type 
+ * @param {number} id 
+ */
+function requestData(server, type, id) {
+    return new Promise(resolve => {
+        let options = {
+            hostname: 'www.biocurd.com',
+            path: '/mysticalcard/v1/data/info/' + server + '/' + type + '/' + id,
+            method: "GET"
         }
-    }
-    let req = https.request(options, res => {
-        let body = "";
-        res.on("data", chip => {
-            body += chip;
-        });
-        res.on("end", () => {
-            callback(0, body);
-        });
-        res.on("error", error => {
-            callback(-1, error);
+        let req = https.request(options, res => {
+            let body = "";
+            res.on("data", chip => {
+                body += chip
+            });
+            res.on("end", () => {
+                let data = JSON.parse(body)
+                resolve(data.data)
+            });
+            res.on("error", error => {
+                resolve()
+            })
         })
+        req.on("error", error => {
+            resolve()
+        })
+        req.end()
     })
-    req.on("error", error => {
-        callback(-1, error);
-    })
-    req.write(postData);
-    req.end();
 }
 
 module.exports = {
